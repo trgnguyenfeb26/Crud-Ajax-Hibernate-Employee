@@ -10,6 +10,12 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
+import com.google.gson.Gson;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.reflect.TypeToken;
+
 import DemoEJB.Model.Employee;
 import DemoEJB.Sevrvic.EmployeesLocal;
 
@@ -55,16 +61,41 @@ public class EmployeeSevrlet extends HttpServlet {
 			case "/update":
 				updateEmployee(request, response);
 				break;
+			case "/employee":
+				listJsonEmployee(request, response);
+				break;
 			default:
 				listEmployee(request, response);
 				break;
 			}
 	}
 
+	private void listJsonEmployee(HttpServletRequest request, HttpServletResponse response) throws IOException {
+		// TODO Auto-generated method stub
+		List<Employee> listEmployee = employee.findAllEmployee();
+		request.setAttribute("listEmployee", listEmployee);
+		Gson gson = new Gson();
+		JsonElement element = gson.toJsonTree(listEmployee, new TypeToken<List<Employee>>(){}.getType());
+		 JsonArray jsonArray = element.getAsJsonArray();
+		 response.setContentType("application/json");
+		 response.getWriter().println(jsonArray);
+	}
+
 	private void listEmployee(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
 		List<Employee> listEmployee = employee.findAllEmployee();
 		request.setAttribute("listEmployee", listEmployee);
+//		Gson gson = new Gson();
+//		JsonElement element = gson.toJsonTree(listEmployee, new TypeToken<List<Employee>>(){}.getType());
+//		 JsonArray jsonArray = element.getAsJsonArray();
+//		 response.setContentType("application/json");
+//		 response.getWriter().println(jsonArray);
+//		RestTemplate restTemplate = new RestTemplate();
+//		restTemplate.postForObject(
+//				  "http://localhost:8080/DemoEJB/employees",
+//				  listEmployee,
+//				  ResponseEntity.class);
+		response.getWriter().write(listEmployee.toString());
 		RequestDispatcher dispatcher = request.getRequestDispatcher("ListEmployees.jsp");
 		dispatcher.forward(request, response);
 	}

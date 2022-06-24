@@ -12,4 +12,5 @@ public interface EmployeesRemote {
 	public void updateEmployee(Employee employee);
 	public Employee findEmployee(int id);
 	public List<Employee> findAllEmployee();
+	
 }

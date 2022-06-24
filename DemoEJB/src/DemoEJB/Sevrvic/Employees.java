@@ -8,6 +8,7 @@ import javax.ejb.Stateless;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 
+
 import DemoEJB.Model.Employee;
 import DemoEJB.Utl.HibernateUtil;
 
@@ -84,17 +85,20 @@ public class Employees implements EmployeesRemote, EmployeesLocal {
 	     return employee;
 	}
 	@Override
-	 @SuppressWarnings("unchecked")
 	public List<Employee> findAllEmployee() {
 		// TODO Auto-generated method stub
 		List < Employee > listEmployee = null;
 	     try (Session session = HibernateUtil.getSessionFactory().openSession()) { 
 	        listEmployee = session.createQuery("from Employee").getResultList();
+	   //     String json = new Gson().toJson(listEmployee);
 	     } catch (Exception e) {
 	           e.printStackTrace();
 	     }
+
 	     return listEmployee;     
 	}
+
+	
 	
 	
 
